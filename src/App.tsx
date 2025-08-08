@@ -10,6 +10,7 @@ import Lists from "./pages/Lists";
 import SearchPage from "./pages/Search";
 import Settings from "./pages/Settings";
 import TaskDetails from "./pages/TaskDetails";
+import ListCategory from "./pages/ListCategory";
 
 const queryClient = new QueryClient();
 
@@ -23,6 +24,7 @@ const App = () => (
           <Route element={<AppLayout />}>
             <Route index element={<Index />} />
             <Route path="lists" element={<Lists />} />
+            <Route path="lists/:category" element={<ListCategory />} />
             <Route path="search" element={<SearchPage />} />
             <Route path="settings" element={<Settings />} />
             <Route path="task/:id" element={<TaskDetails />} />

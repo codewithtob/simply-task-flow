@@ -2,6 +2,7 @@ import { Seo } from "@/components/Seo";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useTasks } from "@/context/TasksContext";
+import { Link } from "react-router-dom";
 
 const Lists = () => {
   const { tasks, categories } = useTasks();
@@ -13,15 +14,22 @@ const Lists = () => {
       <h1 className="text-2xl font-semibold mb-4">TaskFlow Lists</h1>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {categories.map((c) => (
-          <Card key={c} className="hover-scale">
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-lg font-medium">{c}</CardTitle>
-              <Badge variant="secondary">{counts(c)}</Badge>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">Pending tasks in {c}</p>
-            </CardContent>
-          </Card>
+          <Link
+            key={c}
+            to={`/lists/${encodeURIComponent(c)}`}
+            className="block rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            aria-label={`View tasks in ${c}`}
+          >
+            <Card className="hover-scale">
+              <CardHeader className="flex flex-row items-center justify-between pb-2">
+                <CardTitle className="text-lg font-medium">{c}</CardTitle>
+                <Badge variant="secondary">{counts(c)}</Badge>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground">Pending tasks in {c}</p>
+              </CardContent>
+            </Card>
+          </Link>
         ))}
       </div>
     </div>
