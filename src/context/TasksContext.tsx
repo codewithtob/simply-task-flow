@@ -172,6 +172,8 @@ export function TasksProvider({ children }: { children: ReactNode }) {
         todayTasks,
         overdueTasks,
         streak,
+        exportData,
+        importData,
       }}
     >
       {children}
