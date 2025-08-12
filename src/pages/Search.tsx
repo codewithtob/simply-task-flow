@@ -26,7 +26,7 @@ const SearchPage = () => {
       <Seo title="TaskFlow – Search" description="Find tasks quickly with smart filters and sorting." />
       <h1 className="text-2xl font-semibold mb-4">TaskFlow Search</h1>
       <div className="flex flex-col gap-3 md:flex-row md:items-center md:gap-4">
-        <Input placeholder="Search tasks..." value={q} onChange={(e) => setQ(e.target.value)} className="md:max-w-sm" />
+        <Input id="search-input" placeholder="Search tasks..." value={q} onChange={(e) => setQ(e.target.value)} className="md:max-w-sm" />
         <div className="flex items-center gap-2">
           <Button variant={priority === "All" ? "cta" : "outline"} onClick={() => setPriority("All")}>All</Button>
           {chips.map((p) => (

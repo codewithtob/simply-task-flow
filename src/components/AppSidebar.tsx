@@ -1,5 +1,5 @@
 import { NavLink, useLocation } from "react-router-dom";
-import { Home, ListTodo, Search, Settings } from "lucide-react";
+import { Home, ListTodo, Search, Settings, CalendarDays } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -15,6 +15,7 @@ import {
 const items = [
   { title: "Home", url: "/", icon: Home },
   { title: "Lists", url: "/lists", icon: ListTodo },
+  { title: "Calendar", url: "/calendar", icon: CalendarDays },
   { title: "Search", url: "/search", icon: Search },
   { title: "Settings", url: "/settings", icon: Settings },
 ];

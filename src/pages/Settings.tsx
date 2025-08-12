@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { useTasks } from "@/context/TasksContext";
 
 const Settings = () => {
-  const { categories, addCategory } = useTasks();
+  const { categories, addCategory, exportData, importData } = useTasks();
   const [themeDark, setThemeDark] = useState<boolean>(false);
   const [newCat, setNewCat] = useState("");
 
@@ -59,6 +59,45 @@ const Settings = () => {
                 <span key={c} className="rounded-md bg-secondary px-2 py-1 text-xs">{c}</span>
               ))}
             </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Data</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <div className="flex items-center gap-2">
+              <Button variant="outline" onClick={() => {
+                const data = exportData();
+                const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = "taskflow-data.json";
+                a.click();
+                URL.revokeObjectURL(url);
+              }}>Export JSON</Button>
+              <Button variant="outline" onClick={() => document.getElementById("import-file")?.click()}>Import JSON</Button>
+              <input id="import-file" type="file" accept="application/json" className="hidden" onChange={async (e) => {
+                const file = e.target.files?.[0];
+                if (!file) return;
+                try {
+                  const text = await file.text();
+                  const parsed = JSON.parse(text);
+                  if (parsed?.tasks && parsed?.categories) {
+                    importData(parsed);
+                  } else {
+                    alert("Invalid file format");
+                  }
+                } catch {
+                  alert("Failed to import JSON");
+                } finally {
+                  e.currentTarget.value = "";
+                }
+              }} />
+            </div>
+            <p className="text-xs text-muted-foreground">Export your data or import from a previous backup.</p>
           </CardContent>
         </Card>
       </div>

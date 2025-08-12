@@ -1,4 +1,4 @@
-import { createContext, useContext, useMemo, useState, ReactNode } from "react";
+import { createContext, useContext, useMemo, useState, ReactNode, useEffect } from "react";
 import { addDays, isToday, isBefore, parseISO } from "date-fns";
 
 export type Priority = "Low" | "Medium" | "High";
@@ -26,6 +26,8 @@ export type TasksContextType = {
   todayTasks: Task[];
   overdueTasks: Task[];
   streak: number;
+  exportData: () => { tasks: Task[]; categories: string[] };
+  importData: (data: { tasks: Task[]; categories: string[] }) => void;
 };
 
 const TasksContext = createContext<TasksContextType | null>(null);
@@ -56,8 +58,22 @@ const seedTasks: Task[] = [
 ];
 
 export function TasksProvider({ children }: { children: ReactNode }) {
-  const [tasks, setTasks] = useState<Task[]>(seedTasks);
-  const [categories, setCategories] = useState<string[]>(defaultCategories);
+  const STORAGE_KEY = "taskflow.state.v1";
+  type Persisted = { tasks: Task[]; categories: string[] };
+
+  const loadState = (): Persisted | null => {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      return raw ? (JSON.parse(raw) as Persisted) : null;
+    } catch {
+      return null;
+    }
+  };
+
+  const initial = loadState();
+
+  const [tasks, setTasks] = useState<Task[]>(initial?.tasks ?? seedTasks);
+  const [categories, setCategories] = useState<string[]>(initial?.categories ?? defaultCategories);
 
   const addCategory = (name: string) => {
     setCategories((prev) => (prev.includes(name) ? prev : [...prev, name]));
@@ -109,6 +125,22 @@ export function TasksProvider({ children }: { children: ReactNode }) {
     () => tasks.filter((t) => t.dueDate && isBefore(parseISO(t.dueDate), new Date()) && !isToday(parseISO(t.dueDate)) && !t.completed),
     [tasks]
   );
+
+  const exportData = () => ({ tasks, categories });
+
+  const importData = (data: { tasks: Task[]; categories: string[] }) => {
+    setTasks(Array.isArray(data.tasks) ? data.tasks : []);
+    setCategories(Array.isArray(data.categories) ? data.categories : []);
+  };
+
+  useEffect(() => {
+    try {
+      const persist = { tasks, categories };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(persist));
+    } catch {
+      // ignore
+    }
+  }, [tasks, categories]);
 
   // naive streak: consecutive days with any completion
   const streak = useMemo(() => {

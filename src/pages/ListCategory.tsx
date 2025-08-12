@@ -1,7 +1,7 @@
 import { Seo } from "@/components/Seo";
 import { useTasks } from "@/context/TasksContext";
 import { useParams, Link } from "react-router-dom";
-import { Badge } from "@/components/ui/badge";
+import { TaskList } from "@/components/tasks/TaskList";
 
 const ListCategory = () => {
   const { category: raw } = useParams<{ category: string }>();
@@ -25,23 +25,7 @@ const ListCategory = () => {
       <div className="mb-4">
         <Link to="/lists" className="text-sm text-muted-foreground hover:underline">&larr; Back to Lists</Link>
       </div>
-      {items.length === 0 ? (
-        <p className="text-sm text-muted-foreground">No tasks in this category yet.</p>
-      ) : (
-        <ul className="grid gap-2">
-          {items.map((t) => (
-            <li key={t.id} className="flex items-center justify-between rounded-lg border bg-card p-4">
-              <Link to={`/task/${t.id}`} className="font-medium hover:underline">
-                {t.title}
-              </Link>
-              <div className="flex items-center gap-2">
-                <Badge variant="secondary">{t.priority}</Badge>
-                {t.completed && <Badge variant="outline">Done</Badge>}
-              </div>
-            </li>
-          ))}
-        </ul>
-      )}
+      <TaskList tasks={items} />
     </div>
   );
 };
