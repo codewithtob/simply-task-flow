@@ -71,7 +71,7 @@ const Index = () => {
             <p className="text-sm text-muted-foreground">No tasks for today. Add one with the + button.</p>
           ) : (
             todayTasks.map((t) => (
-              <Card key={t.id} className="hover-scale">
+              <Card key={t.id} className="hover-scale-subtle">
                 <CardContent className="flex items-start gap-3 p-4">
                   <Checkbox checked={t.completed} onCheckedChange={() => toggleComplete(t.id)} />
                   <div className="flex-1">
