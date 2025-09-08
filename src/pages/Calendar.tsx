@@ -5,10 +5,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Calendar as CalendarWidget } from "@/components/ui/calendar";
 import { useTasks } from "@/context/TasksContext";
 import { Button } from "@/components/ui/button";
+import { TaskQuickAdd } from "@/components/tasks/TaskQuickAdd";
 
 export default function CalendarPage() {
   const { tasks } = useTasks();
   const [date, setDate] = useState<Date | undefined>(new Date());
+  const [openAdd, setOpenAdd] = useState(false);
 
   const dayTasks = tasks.filter((t) => t.dueDate && date && isSameDay(new Date(t.dueDate), date));
 
@@ -39,10 +41,11 @@ export default function CalendarPage() {
                 ))}
               </ul>
             )}
-            <Button variant="cta" className="mt-4">Add Task</Button>
+            <Button variant="cta" className="mt-4" onClick={() => setOpenAdd(true)}>Add Task</Button>
           </CardContent>
         </Card>
       </div>
+      <TaskQuickAdd open={openAdd} onOpenChange={setOpenAdd} />
     </div>
   );
 }
