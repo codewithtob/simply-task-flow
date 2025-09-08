@@ -12,6 +12,8 @@ import Settings from "./pages/Settings";
 import TaskDetails from "./pages/TaskDetails";
 import ListCategory from "./pages/ListCategory";
 import CalendarPage from "./pages/Calendar";
+import SignIn from "./pages/SignIn";
+import SignUp from "./pages/SignUp";
 
 const queryClient = new QueryClient();
 
@@ -22,6 +24,11 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
+          {/* Authentication routes (outside AppLayout) */}
+          <Route path="/signin" element={<SignIn />} />
+          <Route path="/signup" element={<SignUp />} />
+          
+          {/* Main app routes (inside AppLayout) */}
           <Route element={<AppLayout />}>
             <Route index element={<Index />} />
             <Route path="lists" element={<Lists />} />
